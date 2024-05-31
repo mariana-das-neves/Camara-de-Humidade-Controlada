@@ -1,0 +1,272 @@
+\documentclass[journal]{IEEEtran}
+\usepackage{graphicx, hyperref}
+\usepackage{subcaption,lipsum}
+\usepackage{dblfloatfix}
+\usepackage{float}
+\usepackage{multicol}
+\usepackage[toc,page]{appendix}
+
+\ifCLASSINFOpdf
+
+\else
+  % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
+\fi
+% correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+\begin{document}
+
+\title{Câmara de Humidade Controlada}
+
+\author{João Raúl Vidal Carvalho up202004346 \\ Mariana Gonçalves Neves up202008785 \\ Sofia Marques Duarte up202007789 \\ Departamento de Física da Faculdade de Ciências da Universidade do Porto}
+
+% The paper headers
+\markboth{PROJETO INTEGRADOR}%
+{Shell \MakeLowercase{\textit{et al.}}: Bare Demo of IEEEtran.cls for IEEE Journals}
+
+\maketitle
+
+\section{Abstract}
+
+O objetivo principal é a monitorização e controlo da humidade relativa do ar de uma câmara fechada utilizando uma interface em LabView. Através desta interface deverá ser possível fazer rampas de aumento e diminuição de humidade relativa ou manter a humidade relativa do ar em valores estáveis. 
+
+
+
+
+\section{Fase de Conceção}
+
+- OBJETIVOS
+- IDENTIFICAR O PROBLEMA A RESOLVER
+- DEFINIR CONCEITO
+
+
+Os objetivos de trabalho incluem a monitorização e controlo da humidade relativa do ar dentro de uma câmara fechada recorrendo a uma interface $LabVIEW$. Este controlo inclui a estabilização da humidade recorrendo ao seu aumento ou decréscimo.
+
+
+
+
+
+\section{Descrição dos Casos de Uso}
+
+- DESENVOLVER CASOS DE ESTUDO DETALHADOS
+- DESCREVER COMO DIFERENTES UTILIZADORES IRÃO INTERAGIR COM O SISTEMA
+- COMPREENDER OS CENÁRIOS EM QUE IRÃO OPERAR
+- ESBOÇAR AÇÕES ESPECÍFICAS DOS CASOS DE ESTUDO 
+
+
+Neste projeto teremos dois modos a operar: um manual e outro automático.
+No modo manual, o utilizador poderá interagir com o sistema, controlando o funcionamento do humidificador, desumidificador e ventoinhas.
+
+No modo automático, o utilizador coloca o valor de humidade que pretende que a câmara atinja. Caso seja superior ao valor de humidade detetado pelos sensores, é ligado o humidificador; caso contrário, será ligado o desumidificador. 
+Será dada uma margem de erro, para evitar o bouncing, e, assim que o valor ideal for atingido, os componentes serão desligados.
+
+
+
+
+
+
+
+\section{Especificação de Requisitos}
+
+-> REQUISITOS FUNCIONAIS: O QUE O SISTEMA DEVE FAZER
+-> REQUISITOS NÃO FUNCIONAIS: COMO O SISTEMA DEVE ATUAR SOB VÁRIAS CONDIÇÕES
+
+// Estas 4 secções criadas acho que se poderiam juntar numa só. Acho que só têm importância para projetar o trabalho e não para o relatório
+
+
+
+
+
+\section{Design do Sistema e Especificação de Componentes}
+
+-> DESENHAR ARQUITETURA DO SISTEMA
+-> INSTRUMENTOS E MATERIAIS NECESSÁRIOS
+
+\subsection{Material}
+
+%O material base para este projeto inclui sensores de humidade e temperatura, ventoinhas, um humidificador de ultrassons comercial, um desumidificador comercial, relés para ativação de vários componentes, microcontroladores com interface LabView e eletrónica diversa.
+
+%esta parte de cima é redundante com o que está embaixo, pode-se tirar, não?
+
+
+Para este projeto foram precisos os seguintes materiais:
+\begin{itemize}
+    \item Microcontrolador Arduino UNO;
+    \item 2 sensores de temperatura e humidade DHT22;
+    \item Humidificador de ultrassons comercial [USB Colorful Humidifier];
+    \item Desumidificador comercial;
+    \item Ventoinhas;
+    \item Breadboard e cabos de ligação;
+    \item Relés para ativação de vários componentes;
+    \item FETs;
+    \item Resistências
+\end{itemize}
+
+A validação deste projeto pode ser efetuada usando uma câmara fechada existente nas instalações do INESC TEC. 
+
+\subsection{Procedimento}
+
+Serão ligados relés aos diferentes componentes para controlar o seu funcionamento. Ao desumidificador e ventoinhas será ligado um, enquanto que ao humidificador, devido aos seus diferentes modos, serão ligados dois relés:
+
+Um que funcionará como ligação à fonte de alimentação e um outro que funcionará como botão para controlar os modos. 
+
+Um toque no botão e é ativado o modo contínuo;
+Clicando outra vez, é ativado o modo intermitente;
+Pressionando durante 3 segundos, é ativado o brilho;
+Pressionado outros 3 segundos, é ativado o modo de cores.
+
+
+
+%meter foto do circuito
+
+
+
+%será dito mais à frente a partir do código Arduino:
+%Desumificador = 4
+%Ventoinhas = 12 e 8
+%Sensores = 6 e 7
+%Humificadores = 2 alimentação, 3 switch
+
+
+
+\section{Implementação e Integração}
+
+%CONSTRUÇÃO
+
+
+%CODIFICAÇÃO;
+
+\subsection{Código Arduino}
+
+Este foi o código utilizado para definir os pinos do Arduino UNO associados aos componentes. Os sensores foram ligados aos pinos 6 e 7; as ventoinhas aos pinos 8 e 12;
+o desumidificador ao 4 e os dois relés do humidificador aos pinos 2 e 3.
+
+
+ \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.80\textwidth]{Arduino1.jpeg}
+    \label{fig:1}
+\end{figure}
+
+Aqui define-se o código para ligar e desligar as ventoinhas, bem como desumidificador, digitando os respetivos caracteres no Serial Monitor.
+
+De notar que as duas ventoinhas não funcionam de modo independente uma da outra. 
+
+
+ \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.80\textwidth]{Arduino2.jpeg}
+    \caption{\label{fig:2} Código no Arduino IDE}
+    \label{fig:2}
+\end{figure}
+
+
+
+Esta parte está destinada ao controlo do humidificador que, tendo 3 modos, terá 3 funções: modo contínuo, modo pulsado e modo desligado.
+
+ \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.80\textwidth]{Arduino3.jpeg}
+    \caption{\label{fig:3} Código no Arduino IDE}
+    \label{fig:3}
+\end{figure}
+
+
+Este foi o código utilizado para podermos detetar os valores de temperatura e humidade dos 2 sensores DHT22. Os respetivos valores aparecerão no Serial Monitor do Arduino IDE.
+
+ \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.80\textwidth]{Arduino4.jpeg}
+    \caption{\label{fig:4} Código no Arduino IDE}
+    \label{fig:4}
+\end{figure}
+
+
+
+
+\subsection{LabVIEW}
+
+Para conseguir ler os valores de temperatura e humidade dos 2 sensores em LabVIEW:
+
+ \begin{figure}[H]
+    \centering
+    \includegraphics[width=.9\linewidth]{labview1.jpg}
+    \caption{\label{fig:1} Interface LabVIEW}
+    \label{fig:3}
+\end{figure}
+
+Vamos tomar partido das médias da temperatura e humidade para prosseguir o trabalho.
+
+% MONTAGEM
+
+
+
+
+
+
+
+\section{Testes e Otimização}
+
+-> REALIZAÇÃO DE TESTES EXAUSTIVOS
+-> IDENTIFICAÇÃO DE DISCREPÂNCIAS E DEFEITOS
+-> IDENTIFICAÇÃO DE MELHORIAS
+-> OTIMIZAÇÃO
+
+
+
+
+
+
+\section{Revisão do Projeto e Encerramento}
+
+
+
+
+
+
+ 
+\section{Resultados e conclusão}
+
+
+
+
+
+
+
+\section{Anexos}
+
+
+
+
+
+
+
+
+
+\newpage
+\section{Appendices}
+
+
+
+
+
+
+\subsection{Uncertainties}
+
+If $x$ is a function of other variables, for example: $x = f(y,z,w)$, Its uncertainty is determined by expression \ref{equa:uncertainty}:
+
+\begin{equation}
+    \Delta x = x \cdot \sqrt{(\frac{\Delta y}{y})^2+(\frac{\Delta z}{z})^2+(\frac{\Delta w}{w})^2}
+    \label{equa:uncertainty}
+\end{equation}
+
+\bibliographystyle{plain}
+\bibliography{bib}
+
+
+
+
+
+\end{document}
+
+
